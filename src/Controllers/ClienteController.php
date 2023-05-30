@@ -5,21 +5,27 @@ require '../src/Models/Cliente.php';
 class ClienteController {
     public function getClientes() {
         $clientes = new Cliente();
-        $clientes->getClientes();
-        return $clientes;
+        $dados = $clientes->getClientes();
+        return $dados;
+    }
+
+    public function getClienteById($id) {
+        $clientes = new Cliente();
+        $dados = $clientes->getCliente($id);
+        return $dados;
     }
 
     public function cadastrar($dados) { 
         $clientes = new Cliente();
         $clientes->createCliente($dados);
+
         return $clientes;
-        // Flight::render('../../views/home.php'); 
     }
 
-    public function editar($id, $dados) {
+    public function update($id, $dados) {
         $clientes = new Cliente();
-        $clientes->editCliente($id, $dados);
+        $clientes->updateCliente($id, $dados);
 
-        Flight::render('../../views/home.php'); 
+        return $clientes;
     }
 }

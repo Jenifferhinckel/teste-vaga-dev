@@ -11,11 +11,21 @@ class Cliente
     }
 
     public function getClientes() {
-        $consulta = $this->db->prepare("SELECT * FROM clientes");
-        $consulta->execute();
-        $dados = $consulta->fetchAll(\PDO::FETCH_ASSOC);
-        var_dump($dados);
-        return $dados;
+        $sql = "SELECT * FROM clientes";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+        return $result;
+    }
+
+    public function getCliente($id) {
+        $sql = "SELECT * FROM clientes WHERE id =". $id;
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        
+        return $result;
     }
 
     public function createCliente($dados) {
@@ -39,13 +49,23 @@ class Cliente
         return false;
     }
 
-    public function editCliente($dados) {
-        $sql = "SELECT * FROM clientes";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($sqlParams);
-        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if(count($result) > 0)
+    public function updateCliente($id, $dados) {
+        $consulta = $this->db->prepare("UPDATE clientes SET cnpj = :cnpj, nome_empresa = :nome_empresa, cep = :cep, endereco = :endereco, numero = :numero, bairro = :bairro, uf = :uf,
+        cidade = :cidade WHERE id =". $id);
+        $consulta->bindParam(':cnpj', $dados['cnpj']);
+        $consulta->bindParam(':nome_empresa', $dados['nome_empresa']);
+        $consulta->bindParam(':cep', $dados['cep']);
+        $consulta->bindParam(':endereco', $dados['endereco']);
+        $consulta->bindParam(':numero', $dados['numero']);
+        $consulta->bindParam(':bairro', $dados['bairro']);
+        $consulta->bindParam(':uf', $dados['uf']);
+        $consulta->bindParam(':cidade', $dados['cidade']);
+        
+        $consulta->execute();
+        
+        if($consulta->rowCount() > 0) { 
             return true;
+        }
 
         return false;
     }

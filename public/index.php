@@ -27,7 +27,6 @@ Flight::route('GET /cidades/@estado', function ($estado) {
 Flight::route('GET /clientes', function () {
     $controller = new ClienteController();
     $clientes = $controller->getClientes();
-
     Flight::json($clientes);
 });
 
@@ -38,9 +37,16 @@ Flight::route('POST /cadastrar', function () {
     Flight::redirect('/');
 });
 
-Flight::route('POST /editar', function () {
+Flight::route('/edit/@id', function ($id) {
     $controller = new ClienteController();
-    $controller->editar();
+    $cliente = $controller->getClienteById($id);
+
+    Flight::render('../../views/edit.php', ['cliente' => $cliente]);
+});
+
+Flight::route('POST /update/@id', function ($id) {
+    $controller = new ClienteController();
+    $controller->update($id, $_POST);
 
     Flight::redirect('/');
 });
